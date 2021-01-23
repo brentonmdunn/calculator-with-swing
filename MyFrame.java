@@ -6,11 +6,14 @@ import java.util.*;
 
 public class MyFrame extends JFrame implements ActionListener {
     
+
+    /** 
+     * Declare objects so has global scope
+     */
     JButton clear;
     JButton blank1;
     JButton blank2;
     JButton blank3;
-
     
     JButton button1;
     JButton button2;
@@ -34,7 +37,9 @@ public class MyFrame extends JFrame implements ActionListener {
     int num1 = 0;
     boolean minus = false;
     boolean plus = false;
-    boolean first = true;
+    boolean multiply = false;
+    boolean divide = false;
+    //boolean first = true;
 
     ArrayList<Integer> shown = new ArrayList<Integer>();
 
@@ -44,26 +49,29 @@ public class MyFrame extends JFrame implements ActionListener {
         temp = 0;
 
         if (plus) {
-            //total += value;
-            //temp += value;
             total = num1 + value;
-        }
-        else if (minus) {
-            //total -= value;
-            //temp -= value;
-            System.out.println("Num1: " + num1);
-            System.out.println("Array: " + value);
+        } else if (minus) {
             total = num1 - value;
         } 
-        /*if (first) {
-            total += value;
-            temp += value;
-            first = false;
-        }*/
+        
 
         minus = false;
         plus = false;
         output.setText(s.valueOf(total));
+        
+        shown.clear();
+
+
+        while (total > 0) { 
+            shown.add(total%10);
+            total /= 10;
+        }
+        
+       //Use Collections.reverse(digitList); to reverse the digits
+        Collections.reverse(shown);
+
+
+        
     }
 
     private void enableAllButtons() {
@@ -75,9 +83,11 @@ public class MyFrame extends JFrame implements ActionListener {
     private void disableAllButtons() {
         buttonPlus.setEnabled(false);
         buttonMinus.setEnabled(false);
-        //buttonEquals.setEnabled(false);
     }
 
+    /**
+     * @return String form of the array list
+     */
     private String arrayListToString() {
         fullNumber = "";
         for (int e : shown) {
@@ -86,10 +96,13 @@ public class MyFrame extends JFrame implements ActionListener {
         return fullNumber;
     }
 
+    /**
+     * 
+     * @return int form of the arraylist
+     */
     private int arrayListToInt() {
         boolean firstElement = true;
         int number = 0;
-        //int length = shown.size();
         for (int e : shown) {
             if (firstElement) {
                 number += e;
@@ -103,6 +116,8 @@ public class MyFrame extends JFrame implements ActionListener {
     }
 
     MyFrame() {
+
+        // create JFrame and basic set up
         JFrame frame = new JFrame();
         frame.setTitle("CALCULATOR");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -110,13 +125,14 @@ public class MyFrame extends JFrame implements ActionListener {
         frame.setSize(500,500);
         frame.setLayout(new BorderLayout());
         
+        // create panel to hold buttons
         JPanel buttons = new JPanel();
         buttons.setBackground(Color.green);
         buttons.setLayout(new GridLayout(4,3));
         buttons.setPreferredSize(new Dimension(500,350));
         frame.add(buttons,BorderLayout.SOUTH);
         
-
+        // instantiate buttons
         clear = new JButton("clear");
         blank1 = new JButton("blank1");
         blank2 = new JButton("blank2");
@@ -135,6 +151,7 @@ public class MyFrame extends JFrame implements ActionListener {
         buttonMinus = new JButton("-");
         buttonEquals = new JButton("="); 
 
+        // buttons listen for action 
         clear.addActionListener(this);
         button1.addActionListener(this);
         button2.addActionListener(this);
@@ -149,6 +166,7 @@ public class MyFrame extends JFrame implements ActionListener {
         buttonMinus.addActionListener(this);
         buttonEquals.addActionListener(this);
 
+        // add buttons to panel 
         buttons.add(clear);
         buttons.add(blank1);
         buttons.add(blank2);
@@ -166,13 +184,16 @@ public class MyFrame extends JFrame implements ActionListener {
         buttons.add(button9);
         buttons.add(buttonEquals);
 
+        // create lavel for output at the top of the calclator
         output = new JLabel();
         output.setText("TYPE SOMETHING");
         output.setFont(new Font("Times New Roman",Font.PLAIN,40));
         output.setHorizontalAlignment(JLabel.RIGHT);
 
+        // add panel to frame 
         frame.add(output);
 
+        // set frame visible 
         frame.setVisible(true);
 
     }
@@ -183,55 +204,44 @@ public class MyFrame extends JFrame implements ActionListener {
             shown.clear();
             num1 = 0;
             output.setText("");
-        }if(e.getSource()==button1) {
+        } else if(e.getSource()==button1) {
             shown.add(1);
             output.setText(arrayListToString());
-        }
-        if(e.getSource()==button2) {
+        } else if(e.getSource()==button2) {
             shown.add(2);
             output.setText(arrayListToString());
-        }
-        if(e.getSource()==button3) {
+        } else if(e.getSource()==button3) {
             shown.add(3);
             output.setText(arrayListToString());
-        }
-        if(e.getSource()==button4) {
+        } else if(e.getSource()==button4) {
             shown.add(4);
             output.setText(arrayListToString());
-        }
-        if(e.getSource()==button5) {
+        } else if(e.getSource()==button5) {
             shown.add(5);
             output.setText(arrayListToString());
-        }
-        if(e.getSource()==button6) {
+        } else if(e.getSource()==button6) {
             shown.add(6);
             output.setText(arrayListToString());
-        }
-        if(e.getSource()==button7) {
+        } else if(e.getSource()==button7) {
             shown.add(7);
             output.setText(arrayListToString());
-        }
-        if(e.getSource()==button8) {
+        } else if(e.getSource()==button8) {
             shown.add(8);
             output.setText(arrayListToString());
-        }
-        if(e.getSource()==button9) {
+        } else if(e.getSource()==button9) {
             shown.add(9);
             output.setText(arrayListToString());
-        }
-        if(e.getSource()==buttonPlus) {
+        } else if(e.getSource()==buttonPlus) {
             plus = true;
             num1 = arrayListToInt();
             shown.clear();
             disableAllButtons();
-        }
-        if(e.getSource()==buttonMinus) {
+        } else if(e.getSource()==buttonMinus) {
             minus = true;
             num1 = arrayListToInt();
             shown.clear();
             disableAllButtons();
-        }
-        if(e.getSource()==buttonEquals) {
+        } else if(e.getSource()==buttonEquals) {
             buttonAction(arrayListToInt());
         }
     }
